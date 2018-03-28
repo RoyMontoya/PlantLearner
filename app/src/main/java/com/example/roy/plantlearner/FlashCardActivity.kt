@@ -3,6 +3,7 @@ package com.example.roy.plantlearner
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -23,8 +24,22 @@ class FlashCardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_flash_card)
     }
 
+    fun onButton0Click(v: View) {
+        var randomNumber = (Math.random() * 4).toInt() + 1
+
+        when(randomNumber){
+            1 -> button.setBackgroundColor(Color.GREEN)
+            2 -> button1.setBackgroundColor(Color.GREEN)
+            3 -> button2.setBackgroundColor(Color.GREEN)
+            4 -> button3.setBackgroundColor(Color.GREEN)
+        }
+    }
+
     fun onButton1Click(v: View) {
-        var redbud = Plant(83, "cercis", "canadensis", "", "Eastern RedBud")
+        button.setBackgroundColor(Color.LTGRAY)
+        button1.setBackgroundColor(Color.LTGRAY)
+        button2.setBackgroundColor(Color.LTGRAY)
+        button3.setBackgroundColor(Color.LTGRAY)
     }
 
     fun onButton2Click(v: View) {
