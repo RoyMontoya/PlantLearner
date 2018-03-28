@@ -17,40 +17,30 @@ import java.io.IOException
 
 class FlashCardActivity : AppCompatActivity() {
 
+    var plants: List<Plant> = ArrayList<Plant>()
     val CAMARA_REQUEST = 10
+    var correctAnswer = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_flash_card)
-    }
 
-    fun onButton0Click(v: View) {
-        var randomNumber = (Math.random() * 4).toInt() + 1
-
-        when(randomNumber){
-            1 -> button.setBackgroundColor(Color.GREEN)
-            2 -> button1.setBackgroundColor(Color.GREEN)
-            3 -> button2.setBackgroundColor(Color.GREEN)
-            4 -> button3.setBackgroundColor(Color.GREEN)
-        }
-    }
-
-    fun onButton1Click(v: View) {
+        getPlantsTask().execute("")
         button.setBackgroundColor(Color.LTGRAY)
         button1.setBackgroundColor(Color.LTGRAY)
         button2.setBackgroundColor(Color.LTGRAY)
         button3.setBackgroundColor(Color.LTGRAY)
     }
 
-    fun onButton2Click(v: View) {
-        var getPlantsActivity = getPlantsActivity()
-        getPlantsActivity.execute("1")
-    }
+    fun onButton0Click(v: View) = evaluate(0)
 
 
-    fun onClickButton3(v: View) {
-        startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMARA_REQUEST)
-    }
+    fun onButton1Click(v: View) = evaluate(1)
+
+    fun onButton2Click(v: View) = evaluate(2)
+
+    fun onClickButton3(v: View) = evaluate(3)
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -72,7 +62,7 @@ class FlashCardActivity : AppCompatActivity() {
     }
 
 
-    inner class getPlantsActivity : AsyncTask<String, Int, List<Plant>?>() {
+    inner class getPlantsTask : AsyncTask<String, Int, List<Plant>?>() {
 
         override fun doInBackground(vararg search: String?): List<Plant>? {
             val difficulty = search[0]
@@ -82,9 +72,32 @@ class FlashCardActivity : AppCompatActivity() {
 
         override fun onPostExecute(result: List<Plant>?) {
             super.onPostExecute(result)
+            if (result != null && result.size > 3) {
+                button.text = result.get(0).toString()
+                button1.text = result.get(1).toString()
+                button2.text = result.get(2).toString()
+                button3.text = result.get(3).toString()
+                correctAnswer = (Math.random() * 4).toInt()
+            }
 
+            plants = result!!
         }
 
+    }
+
+    private fun evaluate(answer: Int) {
+        when (correctAnswer) {
+            0 -> button.setBackgroundColor(Color.GREEN)
+            1 -> button1.setBackgroundColor(Color.GREEN)
+            2 -> button2.setBackgroundColor(Color.GREEN)
+            3 -> button3.setBackgroundColor(Color.GREEN)
+        }
+        if(answer == correctAnswer){
+            tv_status.text = "Correct"
+        } else {
+            val correct = plants.get(correctAnswer).toString()
+            tv_status.text = "The correct answer is: $correct"
+        }
     }
 
 

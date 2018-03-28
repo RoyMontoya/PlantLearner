@@ -23,7 +23,7 @@ class NetworkingDAO {
             val bis = BufferedInputStream(urlConnection.inputStream)
             val bin = BufferedReader(InputStreamReader(bis))
 
-            var inputLine: String
+            var inputLine: String?
             inputLine = bin.readLine()
             while (inputLine != null) {
                 sb.append(inputLine)
