@@ -84,7 +84,7 @@ class FlashCardActivity : AppCompatActivity() {
                 correctAnswer = (Math.random() * 4).toInt()
             }
 
-            getPhotoTask().execute(result.get(correctAnswer).photoName)
+            getPhotoTask().execute(result?.get(correctAnswer)?.photoName)
 
             plants = result!!
         }
