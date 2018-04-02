@@ -19,17 +19,17 @@ class PlantService {
         var i = 0
 
         while (i < JSONArray.length()) {
-            var plant = Plant()
+            val plant = Plant()
 
-            var plantJson = JSONArray.getJSONObject(i)
+            val plantJson = JSONArray.getJSONObject(i)
             with(plantJson) {
                 plant.guid = getInt("plant")
                 plant.genus = getString("genus")
                 plant.species = getString("species")
                 plant.cultivar = getString("cultivar")
                 plant.common = getString("common")
+                plant.photoName   = getString("picture_name")
             }
-
 
             allPlants.add(plant)
 

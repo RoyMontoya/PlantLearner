@@ -1,5 +1,7 @@
 package com.example.roy.plantlearner.dao
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.IOException
@@ -33,5 +35,23 @@ class NetworkingDAO {
             urlConnection.disconnect()
         }
         return sb.toString()
+    }
+
+    fun populatePicture(pictureName: String?): Bitmap? {
+        var bitmap : Bitmap? = null
+        val plantURI = PLANTPLACES_COM + "/photo/mini/$pictureName"
+        val url = URL(plantURI)
+
+        val inputStream = url.openConnection().getInputStream()
+
+        inputStream?.let {
+            bitmap = BitmapFactory.decodeStream(it)
+        }
+
+        return bitmap
+    }
+
+    companion object {
+        val PLANTPLACES_COM = "http://www.plantplaces.com"
     }
 }

@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.example.roy.plantlearner.dao.NetworkingDAO
 import com.example.roy.plantlearner.dto.Plant
 import com.example.roy.plantlearner.service.PlantService
 import kotlinx.android.synthetic.main.activity_flash_card.*
@@ -20,6 +21,9 @@ class FlashCardActivity : AppCompatActivity() {
     var plants: List<Plant> = ArrayList<Plant>()
     val CAMARA_REQUEST = 10
     var correctAnswer = 0
+    var answeredCorrectly = 0
+    var answeredInCorrectly = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +84,8 @@ class FlashCardActivity : AppCompatActivity() {
                 correctAnswer = (Math.random() * 4).toInt()
             }
 
+            getPhotoTask().execute(result.get(correctAnswer).photoName)
+
             plants = result!!
         }
 
@@ -94,10 +100,27 @@ class FlashCardActivity : AppCompatActivity() {
         }
         if(answer == correctAnswer){
             tv_status.text = "Correct"
+            answeredCorrectly++
+            text_correct_answer.text = "$answeredCorrectly"
         } else {
             val correct = plants.get(correctAnswer).toString()
             tv_status.text = "The correct answer is: $correct"
+            answeredInCorrectly++
+            text_wrong_answer.text = "$answeredInCorrectly"
         }
+    }
+
+    inner class getPhotoTask : AsyncTask<String, Int, Bitmap>() {
+
+        override fun doInBackground(vararg picture: String?): Bitmap? {
+            return NetworkingDAO().populatePicture(picture[0])
+        }
+
+        override fun onPostExecute(result: Bitmap?) {
+            super.onPostExecute(result)
+            imageSwitcher.setImageBitmap(result)
+        }
+
     }
 
 
